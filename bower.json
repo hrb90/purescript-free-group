@@ -1,5 +1,6 @@
 {
   "name": "purescript-free-group",
+  "license": "MIT",
   "ignore": [
     "**/.*",
     "node_modules",
