@@ -13,6 +13,7 @@ instance showSigned :: Show a => Show (Signed a) where
   show (Positive x) = "+" <> show x
   show (Negative x) = "-" <> show x
 
+-- Reduce a term of a free group to canonical form.
 canonical :: forall a. Eq a => List (Signed a) -> List (Signed a)
 canonical = foldr cancelOrPush Nil where
   cancelOrPush x@(Positive x1) y@(Cons (Negative y1) tl) = if x1 == y1 then tl else x : y
