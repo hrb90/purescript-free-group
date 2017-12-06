@@ -9,6 +9,8 @@ import Data.Monoid (class Monoid)
 
 data Signed a = Positive a | Negative a
 
+derive instance eqSigned :: Eq a => Eq (Signed a)
+
 instance showSigned :: Show a => Show (Signed a) where
   show (Positive x) = "+" <> show x
   show (Negative x) = "-" <> show x
@@ -26,6 +28,9 @@ newtype Free a = Free (List (Signed a))
 -- Lift a value of type a to a value of type Free a
 free :: forall a. a -> Free a
 free x = Free $ Positive x : Nil
+
+instance eqFreeGrp :: Eq a => Eq (Free a) where
+  eq (Free x) (Free y) = canonical x == canonical y
 
 instance showFreeGrp :: Show a => Show (Free a) where
   show (Free x) = show x
