@@ -3,13 +3,11 @@ module Test.Main where
 import Prelude
 
 import Control.Monad.Eff.Console (log)
+import Data.Either (Either(..))
 import Data.Group (class Group, ginverse)
 import Data.Group.Free (Free(..), Signed(..))
-import Data.List (List)
 import Data.Monoid (class Monoid, mempty)
-import Data.Tuple (Tuple(..))
 import Test.QuickCheck (class Arbitrary, QC, arbitrary, quickCheck')
-import Test.QuickCheck.Gen (Gen)
 import Test.QuickCheck.Laws (A, checkLaws)
 import Test.QuickCheck.Laws.Data.Monoid (checkMonoid)
 import Test.QuickCheck.Laws.Data.Semigroup (checkSemigroup)
@@ -18,12 +16,9 @@ import Type.Proxy (Proxy(..))
 newtype F a = F (Free a)
 
 instance arbitraryF :: Arbitrary a => Arbitrary (F a) where
-  arbitrary = mapArb <$> arbitrary' where
-    arbitrary' :: Gen (List (Tuple a Boolean))
-    arbitrary' = arbitrary
-
-    mapSigned (Tuple x true)  = Positive x
-    mapSigned (Tuple x false) = Negative x
+  arbitrary = mapArb <$> arbitrary where
+    mapSigned (Left x)  = Positive x
+    mapSigned (Right x) = Negative x
 
     mapArb = F <<< Free <<< (map mapSigned)
 
